@@ -1,0 +1,108 @@
+.info-footer .newsletter-email {
+    width: 250px;
+    max-width: 100%;
+    margin-top: 20px;
+}
+
+.info-footer .newsletter-email form {
+    position: relative;
+    display: flex;
+}
+
+.info-footer .newsletter-email .form-email {
+    width: 100%;
+    position: relative;
+    margin: 0;
+}
+
+.info-footer .newsletter-email .form-email .form-control {
+    padding: 0 25px;
+    line-height: 40px;
+    height: 40px;
+    width: 100%;
+    border-radius: unset;
+    background: white;
+    border: none;
+    outline: none !important;
+    margin-bottom: 30px;
+}
+
+
+
+
+.info-footer .social-footer .social  {
+    color: #fff;
+    border: none;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.info-footer .social-footer .social i {
+    margin-right: 10px;
+}
+
+
+.footer-info .header-detail-footer h4{
+    color: #D4D4D4;
+    font-size: 18px;
+    font-weight: 500;
+
+}
+
+.footer-info .header-detail-footer hr {
+    background: #000;
+    margin: 0;
+    border: none;
+    border-top: 1px solid #000;
+    width: 30px;
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+
+.footer-info .footer-detail-content li a,.footer-info .footer-detail-content li {
+    list-style: none;
+    color: #D4D4D4;
+    transition: all .3s ease;
+    text-decoration: none;
+    font-weight: 400;
+    line-height: 32px;
+    font-size: 14px;
+}
+
+.footer-info .footer-detail-content li a:hover {
+    color: #9F8752;
+}
+
+.top-footer .footer-border {
+    padding: 50px 0 40px 30px;
+}
+
+
+.top-footer {
+    background-color: #0C1133;
+    border-top: 1px solid #ddd;
+}
+
+.info-footer {
+    padding: 50px 0 40px;
+}
+
+.info-footer .logo-name h1, .info-footer .logo-name a{
+    letter-spacing: 10px;
+    font-weight: 800;
+    color: #fff;
+    text-decoration: none;
+}
+
+
+.copyright {
+    padding: 26px 0;
+    background-color: #f4f4f4;
+    border-top: 1px solid #ddd;
+}
+
+.info-subs {
+    color: #D4D4D4;
+    font-weight: 300;
+    
+}
