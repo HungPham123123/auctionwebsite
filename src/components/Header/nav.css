@@ -1,21 +1,6 @@
-@font-face {
-    font-family: 'Trajan';
-    src: url(../font-text/Trajan-Regular.ttf);
-}
-
-@font-face {
-    font-family: 'BodoniModa';
-    src: url(../font-text/BodoniModa-Italic-VariableFont_opsz,wght.ttf);
-}
-@font-face {
-    font-family: 'Marcellus';
-    src: url(../font-text/Marcellus-Regular.ttf);
-}
-
 
 
 .nav-container {
-    background: rgba(0, 0, 0, 0);
     padding: 25px 30px;
     display: flex;
     align-items: center;
@@ -28,7 +13,12 @@
     z-index: 1000;
 }
 
-.nav-container.show {
+.nav-container.homepage {
+    background: rgba(0, 0, 0, 0);
+    color: #fff;
+}
+
+.nav-container.homepage.show {
     opacity: 1;
     background: #fff;
     box-shadow: 0 3px 20px rgba(0, 0, 0, .2);
@@ -44,6 +34,11 @@
     color: #000;
 }
 
+.nav-container.otherpage {
+    background: #fff;
+    color: #000;
+}
+
 .logo-name {
     transition: all .35s ease-in-out;
     font-size: 30px;
@@ -51,6 +46,11 @@
     color: #fff;
     font-weight: 700;
     margin-right: 30px;
+}
+.nav-container.otherpage .logo-name,
+.nav-container.otherpage .nav-link-section,
+.nav-container.otherpage .my-account-nav{
+    color: #000;
 }
 
 .logo-name:hover {

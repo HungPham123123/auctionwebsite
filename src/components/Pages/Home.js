@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import PromoVideo from "./Video/PromoVideo";
-
+import './home.css';
 
 function Home() {
     const [timerDays, setTimerDays] = useState('00');
@@ -849,7 +849,6 @@ function Home() {
                     </div>
                     </Link>
                 </div>
-                
                     </div>
                     </div>
                     <div className="container auction-1440">
