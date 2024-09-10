@@ -1,0 +1,20 @@
+.prev-next-container {
+    display: flex;
+}
+
+.previous-button, .next-button {
+    position: relative;
+    color: #1f2230;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 2px;
+    transition: .42s ease;
+    padding: 10px;
+}
+
+.current-page {
+    line-height: 45px;
+}
