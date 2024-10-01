@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './nav.css';
+import useAuthToken from '../../hooks/useAuthToken';
 
 function Nav() {
     const location = useLocation();
     const isHomepage = location.pathname === '/';
-
     const [showNav, setShowNav] = useState(false);
+    const hasToken = useAuthToken();
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 0) {
-                setShowNav(true);
-            } else {
-                setShowNav(false);
-            }
+            setShowNav(window.scrollY > 0);
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -31,8 +28,14 @@ function Nav() {
                 <Link className="nav-link-section" to="/shop">Shop</Link>
             </div>
             <nav className="nav-emoji-bar">
-                <Link className="my-account-nav" to="/user">My Account</Link>
-                <Link className="contact-list" to="/add-listing">ADD LISTING</Link>
+                {hasToken ? (
+                    <>
+                        <Link className="my-account-nav" to="/user">My Account</Link>
+                        <Link className="contact-list" to="/add-listing">ADD LISTING</Link> {/* Show this only if logged in */}
+                    </>
+                ) : (
+                    <Link className="my-account-nav" to="/sign-in">Sign in</Link>
+                )}
             </nav>
         </header>
     );

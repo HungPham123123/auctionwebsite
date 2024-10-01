@@ -161,7 +161,9 @@ function Home() {
                     <div className="auction-items auction-items-bigger">
                     <div className="auction-image bigger-img-auction">
                         <div class="image-wrapper">
+                            <Link to="/detail">
                             <img src="images/productimage1.jpg" />
+                            </Link>
                          </div>
                         <div className="auction-time">
                         <div className="auction-time-items">

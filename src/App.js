@@ -8,6 +8,11 @@ import Userpurchase from './components/Pages/user/userpurchase';
 import './App.css';
 import Nav from './components/Header/Nav';
 import Footer from './components/Footer/Footer';
+import Signin from './components/Pages/SignInSignUp/Signin';
+import CreateProductForm from './components/Pages/CreateAuction/CreateAuctionForm';
+import Detail from './components/Pages/ProductDetail/Detail';
+import Signup from './components/Pages/SignInSignUp/Signup';
+import Shop from './components/Pages/AuctionPage/Shop';
 
 function App() {
   return (
@@ -17,12 +22,17 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/user' element={<Userpage />}>
-            <Route index element={<Navigate to="myprofile" />} /> {/* Redirect to MyProfile by default */}
+            <Route index element={<Navigate to="myprofile" />} /> 
             <Route path='myprofile' element={<Myprofile />} />
             <Route path='order-bidding' element={<Orderbidding />} />
             <Route path='user-purchase' element={<Userpurchase />} />
-            {/* Add more routes as needed */}
           </Route>
+          <Route path='/add-listing' element={<CreateProductForm />}/>
+          <Route path="/auction/detail/:auctionID" element={<Detail />} />
+          <Route path='/sign-in' element={<Signin/>}/>
+          <Route path='/sign-up' element={<Signup/>}/>
+          <Route path='/shop' element={<Shop/>}/>
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
       <Footer />

@@ -596,4 +596,6 @@
     line-height: inherit
 }
 
-
+.logout-button {
+    cursor: pointer;
+}
