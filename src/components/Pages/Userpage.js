@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import './userpage.css'
+import { useAuth } from '../../contexts/AuthProvider';
 
 function Userpage() {
+    const { logout } = useAuth();
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
     const location = useLocation();
     const currentPath = location.pathname.split('/').pop();
     const [activeTab, setActiveTab] = useState(currentPath || 'myprofile');
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
+    };
+
+    const handleLogout = async (e) => {
+        e.preventDefault();
+        
+        const errorMessage = await logout();
+        if (errorMessage) {
+            setError(errorMessage);
+        } else {
+            setError("");
+            navigate('/');
+        }
     };
 
     return (
@@ -34,7 +50,7 @@ function Userpage() {
                                 activeTab === 'purchase' ? 'Purchase' :
                                 'Support'}
                             </h3>
-                            <a href="#">Log Out</a>
+                            <p className='logout-button' onClick={handleLogout}>Log Out</p>
                         </div>
                         <div className="Tab-Select">
                             <div className="nav-tab">
