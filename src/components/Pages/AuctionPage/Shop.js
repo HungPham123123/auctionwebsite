@@ -12,11 +12,12 @@ function Shop() {
         try {
             const response = await axios.get('/api/Auction/all');
             const auctionData = response.data.$values || [];
-            const now = moment();
+            const now = moment.utc(); // Use UTC time
+            console.log(response.data)
 
             // Filter auctions: only include Active or those ended within the last 24 hours
             const filteredAuctions = auctionData.filter(auction => {
-                const endTime = moment(auction.endTime);
+                const endTime = moment.utc(auction.endTime); // Ensure endTime is in UTC
                 const hasEnded = auction.auctionStatus === 'Ended';
                 const isActive = auction.auctionStatus === 'Active';
                 const endedRecently = hasEnded && now.diff(endTime, 'hours') <= 24;
@@ -31,8 +32,8 @@ function Shop() {
     };
 
     const calculateTimeLeft = (endTime) => {
-        const now = moment();
-        const end = moment(endTime);
+        const now = moment.utc(); // Use UTC time
+        const end = moment.utc(endTime); // Ensure endTime is in UTC
         const duration = moment.duration(end.diff(now));
 
         if (duration.asSeconds() <= 0) {
@@ -82,7 +83,9 @@ function Shop() {
                     return (
                         <div className="auction-items" key={auction.auctionID}>
                             <div className="auction-image small-img-auction">
-                                <img src="images/productimage7.jpg" alt={auction.itemTitle} />
+                                <Link to={`/auction/detail/${auction.auctionID}`}>
+                                    <img src={auction.itemImage} alt={auction.itemTitle} />
+                                </Link>
                                 <div className="auction-time">
                                     <div className="auction-time-items">
                                         <div className="countdown-box">

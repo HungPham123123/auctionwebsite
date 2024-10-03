@@ -3,16 +3,18 @@ import Cookies from 'js-cookie';
 
 const axios = _axios.create({
     baseURL: "https://localhost:7006",
-    timeout: 10000,
+    timeout: 100000,
 });
 
 // Request interceptor to attach the token to every request
 axios.interceptors.request.use(
     (config) => {
-        const token = Cookies.get('token'); // Make sure this cookie is being set correctly
+        const token = Cookies.get('token');
+        console.log(Cookies.get('token'));
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         } else {
+            console.log(Cookies.get('token'));
             console.warn('No token found in cookies.'); // Debugging: log warning if no token
         }
         return config;

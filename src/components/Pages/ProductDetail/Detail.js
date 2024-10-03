@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './Detail.css';
 import axios from '../../../utils/axios';
+import moment from 'moment';
 
 const Detail = () => {
     const { auctionID } = useParams();
@@ -11,7 +12,7 @@ const Detail = () => {
     const [isDescriptionVisible, setIsDescriptionVisible] = useState(false);
     const [isMoreInfoVisible, setIsMoreInfoVisible] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
-
+    const [remainingTime, setRemainingTime] = useState({});
     const modalRef = useRef(null);
 
     const toggleDescription = useCallback(() => {
@@ -46,17 +47,13 @@ const Detail = () => {
     };
 
     useEffect(() => {
-        if (auctionDetails && auctionDetails.item) {
-            setMainImage(auctionDetails.item.imageUrl);
-        }
-    }, [auctionDetails]);
-
-    useEffect(() => {
         const fetchAuctionDetails = async () => {
             try {
                 const response = await axios.get(`/api/Auction/${auctionID}`);
-                console.log(response.data)
                 setAuctionDetails(response.data);
+                if (response.data.item) {
+                    setMainImage(response.data.item.imageUrl);
+                }
             } catch (error) {
                 console.error('Error fetching auction details:', error);
             }
@@ -76,14 +73,38 @@ const Detail = () => {
         };
     }, [isModalVisible]);
 
-    const calculateRemainingTime = () => {
-        const endDate = new Date(auctionDetails?.endTime);
-        const now = new Date();
-        const remainingTime = endDate - now;
-        const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        return `${days} day${days !== 1 ? 's' : ''} ${hours} hour${hours !== 1 ? 's' : ''}`;
+    const calculateRemainingTime = (endTime) => {
+        const now = moment.utc(); // Current time in UTC
+        const end = moment.utc(endTime); // End time in UTC
+        const duration = moment.duration(end.diff(now));
+
+        if (duration.asSeconds() <= 0) {
+            return { days: 0, hours: 0, minutes: 0, seconds: 0, ended: true };
+        }
+
+        return {
+            days: Math.floor(duration.asDays()),
+            hours: duration.hours(),
+            minutes: duration.minutes(),
+            seconds: duration.seconds(),
+            ended: false,
+        };
     };
+
+    useEffect(() => {
+        if (!auctionDetails) return;
+
+        const updateRemainingTime = () => {
+            const timeLeft = calculateRemainingTime(auctionDetails.endTime);
+            setRemainingTime(timeLeft);
+        };
+
+        updateRemainingTime(); // Set initial time
+
+        const intervalId = setInterval(updateRemainingTime, 1000); // Update every second
+
+        return () => clearInterval(intervalId); // Clear interval on unmount
+    }, [auctionDetails]);
 
     const sortedAuctionHistories = auctionDetails?.auctionHistories?.$values?.slice().sort((a, b) => b.bidAmount - a.bidAmount) || [];
 
@@ -92,24 +113,30 @@ const Detail = () => {
             <div className="row">
                 <div className="col-md-1">
                     <div className="d-flex flex-column">
-                        <img
-                            src={auctionDetails?.item?.imageUrl}
-                            alt={auctionDetails?.item?.imageUrl}
-                            className="img-thumbnail mb-2"
-                            onClick={() => changeMainImage('images/productimage1.jpg')}
-                        />
-                        <img
-                            src={auctionDetails?.item?.imageUrl1}
-                            alt={auctionDetails?.item?.imageUrl1}
-                            className="img-thumbnail mb-2"
-                            onClick={() => changeMainImage('images/productimage7.jpg')}
-                        />
-                        <img
-                            src={auctionDetails?.item?.imageUrl2}
-                            alt={auctionDetails?.item?.imageUrl2}
-                            className="img-thumbnail mb-2"
-                            onClick={() => changeMainImage('images/book-1.jpg')}
-                        />
+                        {auctionDetails?.item?.imageUrl && (
+                            <img
+                                src={auctionDetails.item.imageUrl}
+                                alt={auctionDetails.item.title}
+                                className="img-thumbnail mb-2"
+                                onClick={() => changeMainImage(auctionDetails.item.imageUrl)}
+                            />
+                        )}
+                        {auctionDetails?.item?.imageUrl1 && (
+                            <img
+                                src={auctionDetails.item.imageUrl1}
+                                alt={auctionDetails.item.title}
+                                className="img-thumbnail mb-2"
+                                onClick={() => changeMainImage(auctionDetails.item.imageUrl1)}
+                            />
+                        )}
+                        {auctionDetails?.item?.imageUrl2 && (
+                            <img
+                                src={auctionDetails.item.imageUrl2}
+                                alt={auctionDetails.item.title}
+                                className="img-thumbnail mb-2"
+                                onClick={() => changeMainImage(auctionDetails.item.imageUrl2)}
+                            />
+                        )}
                     </div>
                 </div>
 
@@ -145,7 +172,7 @@ const Detail = () => {
                 <div className="col-md-4">
                     <div className="product-info">
                         <div className="product-title mb-3">
-                            <p className="text-muted" style={{ fontWeight: '500' }}>{new Date(auctionDetails?.startTime).toLocaleString()}</p>
+                            <p className="text-muted" style={{ fontWeight: '500' }}>{new Date(auctionDetails?.startTime).toUTCString()}</p>
                             <h2>{auctionDetails?.item.title}</h2>
                         </div>
                         <div className="product-bid mb-3 d-flex justify-content-between align-items-center">
@@ -166,8 +193,23 @@ const Detail = () => {
                             </div>
                         </div>
                         <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h3 className="mb-0">${auctionDetails?.currentBid?.bidAmount}</h3>
-                            <span className="end-time text-danger">{calculateRemainingTime()}</span>
+                            <h3 className="mb-0">
+                                ${auctionDetails?.currentBid?.bidAmount !== null && auctionDetails?.currentBid?.bidAmount !== undefined
+                                    ? auctionDetails.currentBid.bidAmount
+                                    : auctionDetails?.item?.startingPrice}
+                            </h3>
+                            {remainingTime.ended ? (
+    <span className="ended-auction">Auction has ended</span>
+) : (
+    <span className="end-time text-danger d-flex align-items-center">
+        {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
+            <span key={unit} className="auction-timer d-flex flex-column align-items-center mx-2">
+                <span className="timer-value">{String(remainingTime[unit]).padStart(2, '0')}</span>
+                <span className="auction-date">{unit.charAt(0).toUpperCase() + unit.slice(1)}</span>
+            </span>
+        ))}
+    </span>
+)}
                         </div>
                         <div className="input-group mb-3">
                             <input
@@ -181,23 +223,22 @@ const Detail = () => {
                         </div>
                     </div>
                     <div className="seller-info">
-              <hr className="custom-line" />
-              <div className="product-bid mb-3 d-flex justify-content-between align-items-center">
-                <div>
-                  <p><strong>{auctionDetails?.item?.user?.username}</strong></p>
-                </div>
-                <div>
-                  <p>
-                    <span className="text-black" style={{ marginRight: '10px' }}>
-                      <i className="bi bi-star-fill"></i>
-                    </span>
-                    <span style={{ marginRight: '10px' }}>4.5</span>
-                    <img src="images/team-7-96x96.jpg" alt="Seller" style={{ width: '40px', height: '40px' }} />
-                  </p>
-                </div>
-              </div>
-              <p className="text-muted">{auctionDetails?.item?.user?.address}</p>
-            </div>
+                        <hr className="custom-line" />
+                        <div className="product-bid mb-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <p><strong>{auctionDetails?.item?.user?.username}</strong></p>
+                            </div>
+                            <div>
+                                <p>
+                                    <span className="text-black" style={{ marginRight: '10px' }}>
+                                        <i className="bi bi-star-fill"></i>
+                                    </span>
+                                    <span style={{ marginRight: '10px' }}>4.5</span>
+                                    <img src="images/team-7-96x96.jpg" alt="Seller" style={{ width: '40px', height: '40px' }} />
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -205,11 +246,11 @@ const Detail = () => {
                 <div className="modal" ref={modalRef}>
                     <div className="modal-content">
                         <span className="close" onClick={hideBidderHistory}>&times;</span>
-                        <h4>Bidding History</h4>
+                        <h2>Bidder History</h2>
                         <ul>
                             {sortedAuctionHistories.map((history) => (
-                                <li key={history.auctionHistoryID}>
-                                    Bid Amount: ${history.bidAmount} at {new Date(history.timestamp).toLocaleString()}
+                                <li key={history.id}>
+                                    <span>{history.bidderUsername}</span> bid ${history.bidAmount} on {new Date(history.timestamp).toUTCString()}
                                 </li>
                             ))}
                         </ul>

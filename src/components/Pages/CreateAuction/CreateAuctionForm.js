@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './CreateAuction.css';
-import axios from '../../../utils/axios';
 import { useNavigate } from 'react-router-dom';
+import axiosNoToken from '../../../utils/axiosNoToken';
+import axios from '../../../utils/axios';
 
 function CreateProductForm() {
-    const [images, setImages] = useState([null, null, null]);
     const [formData, setFormData] = useState({
         itemTitle: '',
         itemDescription: '',
@@ -19,8 +19,11 @@ function CreateProductForm() {
         auctionEndTime: '',
         buyNowPrice: '',
     });
+    const [images, setImages] = useState([null, null, null]); // For previewing images
+    const [imageFiles, setImageFiles] = useState([null, null, null]); // To store image files temporarily
     const [categories, setCategories] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     // Fetch categories on component mount
@@ -28,36 +31,42 @@ function CreateProductForm() {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get('/api/category');
-                console.log('Categories response:', response.data);
                 setCategories(response.data.$values);
             } catch (error) {
                 console.error('Error fetching categories:', error);
-                setErrorMessage('Failed to fetch categories.'); // Handle category fetch error
+                setErrorMessage('Failed to fetch categories.');
             }
         };
-
         fetchCategories();
     }, []);
 
+    // Handle image upload to Cloudinary
+    const handleImageUpload = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'ml_default'); // Ensure this matches your Cloudinary settings
+
+        try {
+            const response = await axiosNoToken.post('https://api.cloudinary.com/v1_1/dklnlcse3/image/upload', formData);
+            return response.data.secure_url;
+        } catch (error) {
+            console.error('Error uploading image:', error.response ? error.response.data : error);
+            return null;
+        }
+    };
+
+    // Handle image changes
     const handleImageChange = (index, event) => {
         const file = event.target.files[0];
         if (file) {
             const newImages = [...images];
-            const imageUrl = URL.createObjectURL(file); // Create a local URL for the uploaded image
-            newImages[index] = imageUrl; // Update the preview
-            
-            // Update formData with the corresponding image URL
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                [`itemImageUrl${index === 0 ? '' : index}`]: imageUrl, // Set the correct itemImageUrl
-            }));
+            newImages[index] = URL.createObjectURL(file); // Update local preview
 
             setImages(newImages);
+            const newImageFiles = [...imageFiles];
+            newImageFiles[index] = file; // Store the file for later upload
+            setImageFiles(newImageFiles);
         }
-    };
-
-    const triggerFileInput = (index) => {
-        document.getElementById(`fileInput${index}`).click();
     };
 
     const handleChange = (e) => {
@@ -67,55 +76,60 @@ function CreateProductForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrorMessage(''); // Clear any previous error messages
-
-        try {
-            // Filter out blob URLs from the image URLs
-            const filteredImages = [
-                formData.itemImageUrl.replace(/^blob:/, ''),  // Remove blob prefix
-                formData.itemImageUrl1.replace(/^blob:/, ''),
-                formData.itemImageUrl2.replace(/^blob:/, ''),
-            ];
+        setErrorMessage('');
+        setLoading(true);
     
-            // Adjust formData to match the backend structure
+        try {
+            // Upload images first
+            const uploadedImageUrls = await Promise.all(imageFiles.map(file => file ? handleImageUpload(file) : null));
+    
+            // Convert auction start and end times to UTC
+            const auctionStartDate = new Date(formData.auctionStartTime);
+            const auctionEndDate = new Date(formData.auctionEndTime);
+    
+            // Prepare payload with converted times
             const payload = {
                 itemTitle: formData.itemTitle,
                 itemDescription: formData.itemDescription,
                 itemCondition: formData.itemCondition,
                 itemStartingPrice: parseFloat(formData.itemStartingPrice),
                 itemReservePrice: parseFloat(formData.itemReservePrice),
-                itemImageUrl: filteredImages[0], // This is the first image without blob
-                itemImageUrl1: filteredImages[1], // This is the second image without blob
-                itemImageUrl2: filteredImages[2], // This is the third image without blob
+                itemImageUrl: uploadedImageUrls[0],
+                itemImageUrl1: uploadedImageUrls[1],
+                itemImageUrl2: uploadedImageUrls[2],
                 itemCategoryID: parseInt(formData.itemCategoryID),
-                auctionStartTime: formData.auctionStartTime,
-                auctionEndTime: formData.auctionEndTime,
+                auctionStartTime: auctionStartDate.toISOString(), // Convert to UTC
+                auctionEndTime: auctionEndDate.toISOString(),     // Convert to UTC
                 buyNowPrice: parseFloat(formData.buyNowPrice),
             };
     
             const response = await axios.post('/api/Auction', payload);
             console.log('Product created:', response.data);
-            navigate('/user/myprofile')
-            // Clear the form or display a success message
+            navigate('/user/myprofile');
+    
+            // Reset form
             setFormData({
                 itemTitle: '',
                 itemDescription: '',
                 itemCondition: '',
                 itemStartingPrice: '',
                 itemReservePrice: '',
-                itemImageUrl: '',
-                itemImageUrl1: '',
-                itemImageUrl2: '',
                 itemCategoryID: '',
                 auctionStartTime: '',
                 auctionEndTime: '',
                 buyNowPrice: '',
             });
             setImages([null, null, null]);
+            setImageFiles([null, null, null]); // Reset image files
         } catch (error) {
             console.error('Error creating product:', error);
             setErrorMessage('User profile is incomplete. Please provide all required information.');
         }
+        setLoading(false);
+    };
+
+    const triggerFileInput = (index) => {
+        document.getElementById(`fileInput${index}`).click();
     };
 
     return (
@@ -170,7 +184,7 @@ function CreateProductForm() {
                     onChange={handleChange}
                     required
                 />
-                
+
                 <div className="image-upload">
                     {images.map((image, index) => (
                         <div key={index} className="image-placeholder" onClick={() => triggerFileInput(index)}>
@@ -203,7 +217,7 @@ function CreateProductForm() {
                         </option>
                     ))}
                 </select>
-                
+
                 <div className="product-duration-section">
                     <label className="product-duration-label">Auction Start Time</label>
                     <input 
@@ -237,8 +251,10 @@ function CreateProductForm() {
                     onChange={handleChange}
                 />
                 
-                <button type="submit" className="submit-button">Create Product</button>
-                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Display error message */}
+                <button type="submit" className="submit-button" disabled={loading}>
+                    {loading ? 'Submitting...' : 'Create Product'}
+                </button>
+                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
             </form>
         </div>
     );
