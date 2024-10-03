@@ -13,6 +13,10 @@ import CreateProductForm from './components/Pages/CreateAuction/CreateAuctionFor
 import Detail from './components/Pages/ProductDetail/Detail';
 import Signup from './components/Pages/SignInSignUp/Signup';
 import Shop from './components/Pages/AuctionPage/Shop';
+import Payment from './components/payment/payment';
+import Forgotpassword from './components/Pages/SignInSignUp/forgotpassword';
+import Ressetpassword from './components/Pages/SignInSignUp/resstpassword';
+import BalanceWithdraw from './components/Pages/user/BalanceWithdraw';
 
 function App() {
   return (
@@ -26,6 +30,7 @@ function App() {
             <Route path='myprofile' element={<Myprofile />} />
             <Route path='order-bidding' element={<Orderbidding />} />
             <Route path='user-purchase' element={<Userpurchase />} />
+            <Route path='balance' element={<BalanceWithdraw />}/>
           </Route>
           <Route path='/add-listing' element={<CreateProductForm />}/>
           <Route path="/auction/detail/:auctionID" element={<Detail />} />
@@ -33,6 +38,9 @@ function App() {
           <Route path='/sign-up' element={<Signup/>}/>
           <Route path='/shop' element={<Shop/>}/>
           <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/payment" element={<Payment/>} />
+          <Route path='/forgot-password' element={<Forgotpassword/>}/>
+          <Route path='/reset-password' element={<Ressetpassword/>}/>
         </Routes>
       </main>
       <Footer />

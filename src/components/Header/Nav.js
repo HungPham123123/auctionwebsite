@@ -7,6 +7,7 @@ function Nav() {
     const location = useLocation();
     const isHomepage = location.pathname === '/';
     const [showNav, setShowNav] = useState(false);
+    const [showNotifications, setShowNotifications] = useState(false);
     const hasToken = useAuthToken();
 
     useEffect(() => {
@@ -21,6 +22,10 @@ function Nav() {
         };
     }, []);
 
+    const toggleNotifications = () => {
+        setShowNotifications(prevState => !prevState);
+    };
+
     return (
         <header className={`nav-container ${showNav ? 'show' : ''} ${isHomepage ? 'homepage' : 'otherpage'}`}>
             <div className="logo-and-links">
@@ -31,7 +36,20 @@ function Nav() {
                 {hasToken ? (
                     <>
                         <Link className="my-account-nav" to="/user">My Account</Link>
-                        <Link className="contact-list" to="/add-listing">ADD LISTING</Link> {/* Show this only if logged in */}
+                        <Link className="contact-list" to="/add-listing">ADD LISTING</Link>
+                        <div className="notification-container">
+                            <button className="notification-button" onClick={toggleNotifications}>
+                                <i className="fa fa-bell"></i>
+                            </button>
+                            {showNotifications && (
+                                <div className="notification-dropdown">
+                                    <ul>
+                                        <li>No new notifications</li>
+                                        {/* Add notifications dynamically here */}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
                     </>
                 ) : (
                     <Link className="my-account-nav" to="/sign-in">Sign in</Link>

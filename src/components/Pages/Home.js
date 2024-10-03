@@ -54,7 +54,7 @@ function Home() {
         <div>
        <div class="home-video-container">
     <video autoPlay loop muted playsinline>
-        <source src="video/6244547_Gramophone Poland Wehrmacht War_By_Sebastian_Jan_Swietek_Artlist_HD.mp4" type="video/mp4"/>
+        <source src="video/video1.mp4" type="video/mp4"/>
         Your browser does not support the video tag.
     </video>
     <div className="overlay">
