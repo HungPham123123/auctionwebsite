@@ -75,7 +75,7 @@ function AcceptRejectAuction() {
                 <tbody>
                     {auctions.map((auction) => (
                         <tr key={auction.auctionID}>
-                            <td><img src={auction.itemImage} alt={auction.itemTitle} className="auction-image" /><img src={auction.itemImage1} alt={auction.itemTitle} className="auction-image" /><img src={auction.itemImage2} alt={auction.itemTitle} className="auction-image" /></td>
+                            <td><img src={auction.itemImage} alt={auction.itemTitle} className="auction-image" style={{maxWidth: "300px"}}/></td>
                             <td>{auction.itemTitle}</td>
                             <td>{auction.itemDescription}</td>
                             <td>${auction.itemStartingPrice}</td>
