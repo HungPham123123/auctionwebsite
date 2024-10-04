@@ -29,7 +29,7 @@ function Nav() {
     return (
         <header className={`nav-container ${showNav ? 'show' : ''} ${isHomepage ? 'homepage' : 'otherpage'}`}>
             <div className="logo-and-links">
-                <Link className="logo-name" to="/">Fox Auction</Link>
+                <Link className="logo-name" to="//">Fox Auction</Link>
                 <Link className="nav-link-section" to="/shop">Shop</Link>
             </div>
             <nav className="nav-emoji-bar">
