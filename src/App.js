@@ -34,7 +34,7 @@ import SearchResult from './components/Pages/Search/SearchResult';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/auctionwebsite">
       <Nav />
       <main>
         <Routes>
