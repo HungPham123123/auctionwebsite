@@ -34,7 +34,7 @@ import SearchResult from './components/Pages/Search/SearchResult';
 
 function App() {
   return (
-    <HashRouter basename="/auctionwebsite">
+    <HashRouter basename="/">
       <Nav />
       <main>
         <Routes>
@@ -53,7 +53,6 @@ function App() {
           <Route path='/sign-in' element={<Signin/>}/>
           <Route path='/sign-up' element={<Signup/>}/>
           <Route path='/shop' element={<Shop/>}/>
-          <Route path="*" element={<Navigate to="/" />} />
           <Route path="/payment" element={<Payment/>} />
           <Route path='/forgot-password' element={<Forgotpassword/>}/>
           <Route path='/reset-password' element={<Ressetpassword/>}/>
@@ -71,6 +70,7 @@ function App() {
           </Route>
           <Route path='/admin/login' element={<AdminLogin />}/>
           <Route path='/search' element={<SearchResult />}/>
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
       <Footer />
