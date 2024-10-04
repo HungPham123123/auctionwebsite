@@ -1,0 +1,58 @@
+/* user-payment.css */
+
+.user-payment-container {
+    /* Additional styles can be added here if needed */
+    margin-top: 2rem; /* Adds margin to the top of the container */
+}
+
+.user-payment-table {
+    border-radius: 0.5rem; /* Rounds the table corners */
+    overflow: hidden; /* Ensures that any overflow content is hidden */
+}
+
+.user-payment-table th,
+.user-payment-table td {
+    vertical-align: middle; /* Center-aligns content in table cells */
+}
+
+.user-payment-title {
+    font-weight: bold; /* Makes the title bold */
+}
+
+/* Status styles */
+.user-payment-status {
+    padding: 0.2rem 0.5rem; /* Adds padding for better appearance */
+    border-radius: 0.25rem; /* Rounds the corners of the status badge */
+    color: #fff; /* White text color for better contrast */
+    display: inline-block; /* Ensures background color applies */
+}
+
+/* Specific status colors */
+.user-payment-status.pending {
+    color: #ffc107; /* Yellow for Pending */
+}
+
+.user-payment-status.completed {
+    color: #28a745; /* Green for Completed */
+}
+
+.user-payment-status.failed {
+    color: #dc3545; /* Red for Failed */
+}
+
+.user-payment-status.refunded {
+    color: #17a2b8; /* Teal for Refunded */
+}
+
+.user-payment-status.cancelled {
+    color: #6c757d; /* Grey for Cancelled */
+}
+
+.user-payment-btn {
+    transition: background-color 0.3s ease; /* Adds transition effect to button */
+}
+
+.user-payment-btn:hover {
+    background-color: #0056b3; /* Darkens button on hover */
+}
+

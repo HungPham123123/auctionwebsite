@@ -1,58 +1,63 @@
-import './payment.css'
+import React, { useState } from 'react';
+import './payment.css';
 
 function Payment() {
+    const [amount, setAmount] = useState(599.00); // Set your auction amount here
+    const [paymentData, setPaymentData] = useState({
+        auctionId: 1, // Replace with your auction ID
+        userId: 1, // Replace with the logged-in user ID
+        paymentAmount: amount,
+        paymentStatus: 1 // Assuming 1 means pending
+    });
+
+    const handlePayment = async () => {
+        try {
+            const response = await fetch('/api/payment/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(paymentData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Redirect the user to the Stripe checkout session
+                window.location.href = data.url;
+            } else {
+                console.error('Error creating payment session:', data);
+                alert('Payment session could not be created.');
+            }
+        } catch (error) {
+            console.error('Payment error:', error);
+            alert('An error occurred while processing the payment.');
+        }
+    };
 
     return (
         <div>
             <div className="container payment-container">
                 <div className="row">
                     <div className="col-md-7">
-                    <div className="card box1 shadow-sm p-md-5 p-md-5 p-4">
-  
-  <div className="fw-bolder mb-4">
-    <span className="fas fa-dollar-sign" />
-    <span className="ps-1">599,00</span>
-  </div>
-  <div className="d-flex flex-column">
-    
-    <div className="d-flex align-items-center justify-content-between text">
-
-    </div>
-    <div className="d-flex align-items-center justify-content-between text mb-4">
-      
-      <span>Total</span>
-      <span className="fas fa-dollar-sign">
-        <span className="ps-1">600.99</span>
-      </span>
-    </div>
-    <div className="border-bottom mb-4" />
-    <div className="d-flex flex-column mb-4">
-      
-      <span className="far fa-file-alt text">
-        <span className="ps-2">Invoice ID:</span>
-      </span>
-      <span className="ps-3">SN8478042099</span>
-    </div>
-    <div className="d-flex flex-column mb-5">
-      
-      <span className="far fa-calendar-alt text">
-        <span className="ps-2">Next payment:</span>
-      </span>
-      <span className="ps-3">22 july,2018</span>
-    </div>
-    <div className="d-flex align-items-center justify-content-between text mt-5">
-      
-      <div className="d-flex flex-column text">
-        
-        <span>Customer Support:</span> <span>online chat 24/7</span>
-      </div>
-      <div className="btn btn-primary rounded-circle">
-        <span className="fas fa-comment-alt" />
-      </div>
-    </div>
-  </div>
-</div>
-
+                        <div className="card box1 shadow-sm p-md-5 p-4">
+                            <div className="fw-bolder mb-4">
+                                <span className="fas fa-dollar-sign" />
+                                <span className="ps-1">{amount.toFixed(2)}</span>
+                            </div>
+                            <div className="d-flex flex-column">
+                                <div className="d-flex align-items-center justify-content-between text">
+                                    <span>Total</span>
+                                    <span className="fas fa-dollar-sign">
+                                        <span className="ps-1">{amount.toFixed(2)}</span>
+                                    </span>
+                                </div>
+                                <div className="border-bottom mb-4" />
+                                <div className="d-flex align-items-center justify-content-between text mt-5">
+                                    <div className="btn btn-primary w-100" onClick={handlePayment}>Pay ${amount.toFixed(2)}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className="col-md-5">
                     <form action="">
@@ -128,16 +133,15 @@ function Payment() {
       </div>
     </div>
     <div className="col-12 px-md-5 px-4 mt-3">
-      
-      <div className="btn btn-primary w-100">Pay $599.00</div>
+        
     </div>
   </div>
 </form>
-
                     </div>
                 </div>
             </div>
         </div>
     );
 }
+
 export default Payment;

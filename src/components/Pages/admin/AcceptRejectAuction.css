@@ -1,0 +1,50 @@
+.auction-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.auction-table th,
+.auction-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.auction-table th {
+    background-color: #f4f4f4;
+}
+
+.image-container {
+    display: flex;
+    gap: 10px; /* Add space between images */
+}
+
+
+
+.accept-button,
+.reject-button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.accept-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.reject-button {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+.accept-button:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+.reject-button:hover {
+    background-color: #d32f2f; /* Darker red */
+}

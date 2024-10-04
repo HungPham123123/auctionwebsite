@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from '../../../utils/axios';
 
 const BalanceWithdraw = () => {
-  // Inline styles as JavaScript objects
+  const [balance, setBalance] = useState(0); // State to store balance
   const containerStyle = {
     maxWidth: '900px',
     margin: 'auto',
@@ -18,7 +19,7 @@ const BalanceWithdraw = () => {
   const balanceBoxStyle = {
     border: '1px solid #000',
     padding: '15px',
-    width: '600px', // Tăng chiều ngang của balanceBox
+    width: '600px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -55,15 +56,27 @@ const BalanceWithdraw = () => {
     borderRadius: '0px',
     padding: '10px 25px',
     marginLeft: '10px',
-    marginTop: '-60px', // Di chuyển nút lên trên một chút
+    marginTop: '-60px',
   };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('/api/user/current');
+        console.log(response.data); // Log the entire response
+        setBalance(response.data.balannce || 0); // Set the balance from $values
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   return (
     <div style={containerStyle}>
-      {/* Header */}
       <h2>Your Balance</h2>
 
-      {/* Current Balance Section */}
       <div style={balanceSectionStyle}>
         <div style={balanceBoxStyle}>
           <div style={balanceTextStyle}>
@@ -72,15 +85,14 @@ const BalanceWithdraw = () => {
           </div>
           <div style={balanceAmountWrapperStyle}>
             <div style={balanceAmountStyle}>
-              200$
+              {balance.toFixed(2)}$ {/* Display balance */}
             </div>
-            <span className="bidder-count" style={unsuccessfulPaymentStyle}>Unsuccessful payment  </span>
+            <span className="bidder-count" style={unsuccessfulPaymentStyle}>Unsuccessful payment</span>
           </div>
         </div>
         <button className="btn btn-dark" style={buttonStyle}>Make payment</button>
       </div>
 
-      {/* Transactions Table */}
       <table className="table" style={tableStyle}>
         <thead>
           <tr>
@@ -92,20 +104,7 @@ const BalanceWithdraw = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>10-29-2021</td>
-            <td>Pending......</td>
-            <td></td>
-            <td>200$</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>10-29-2021</td>
-            <td>Successfully</td>
-            <td></td>
-            <td>200$</td>
-          </tr>
+          {/* Populate transaction rows here if necessary */}
         </tbody>
       </table>
     </div>

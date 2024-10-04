@@ -1,0 +1,22 @@
+.filter-sidebar {
+    padding: 20px;
+    background: #f8f8f8; /* Light gray background */
+}
+
+.checkbox-group {
+    margin-bottom: 20px; /* Space between checkbox groups */
+}
+
+.checkbox-group input {
+    margin-right: 10px; /* Space between checkbox and label */
+}
+
+.container-Shop {
+    margin-top: 140px;
+}
+
+.auction-smaller-item {
+    width: 440px;
+    flex: none!important;
+}
+
