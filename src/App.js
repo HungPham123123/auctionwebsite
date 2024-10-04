@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes, BrowserRouter, Navigate } from 'react-router-dom';
+import { Route, Routes, HashRouter, Navigate } from 'react-router-dom';
 import Home from './components/Pages/Home';
 import Userpage from './components/Pages/Userpage';
 import Myprofile from './components/Pages/user/myprofile';
@@ -34,7 +34,7 @@ import SearchResult from './components/Pages/Search/SearchResult';
 
 function App() {
   return (
-    <BrowserRouter basename="/auctionwebsite">
+    <HashRouter basename="/auctionwebsite">
       <Nav />
       <main>
         <Routes>
@@ -58,7 +58,7 @@ function App() {
           <Route path='/forgot-password' element={<Forgotpassword/>}/>
           <Route path='/reset-password' element={<Ressetpassword/>}/>
           <Route path='/admin' element={<AdminPage />}>
-          <Route index element={<Navigate to="auctions" />} /> 
+            <Route index element={<Navigate to="auctions" />} /> 
             <Route path='auctions' element={<AdminAuction />}/>
             <Route path='bids' element={<AdminBids />}/>
             <Route path='auction-history' element={<AdminAuctionHistory />}/>
@@ -68,13 +68,13 @@ function App() {
             <Route path='roles' element={<AdminRoles />}/>
             <Route path='user' element={<AdminUser />}/>
             <Route path='accepting-auction' element={<AcceptRejectAuction />}/>
-        </Route>
-        <Route path='/admin/login' element={<AdminLogin />}/>
-        <Route path='/search' element={<SearchResult />}/>
+          </Route>
+          <Route path='/admin/login' element={<AdminLogin />}/>
+          <Route path='/search' element={<SearchResult />}/>
         </Routes>
       </main>
       <Footer />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

@@ -13,10 +13,8 @@ const SearchResult = () => {
 
     useEffect(() => {
         const fetchResults = async () => {
-            console.log("Fetching results...");
             try {
                 const response = await axios.get(`/api/Admin/auctions`);
-                console.log("Response received:", response.data);
                 setResults(response.data.$values || []);
                 setLoading(false);
             } catch (error) {
@@ -43,7 +41,6 @@ const SearchResult = () => {
                 return auction.itemTitle && auction.itemTitle.toLowerCase().includes(query.toLowerCase());
             });
 
-            console.log("Filtered results:", filtered);
             setFilteredResults(filtered);
         } else {
             setFilteredResults(results);
@@ -90,7 +87,6 @@ const SearchResult = () => {
 
     if (loading) return <div>Loading...</div>;
 
-    console.log("Final filtered results:", filteredResults);
 
     return (
         <div className="container mt-5" style={{ maxWidth: '1440px' }}>

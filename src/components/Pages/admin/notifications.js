@@ -12,7 +12,6 @@ function AdminNotifications() {
         // Fetch notifications from the API
         axios.get('/api/Admin/notifications')
             .then(response => {
-                console.log(response.data);
                 setNotifications(response.data.$values); // Store notifications in state
             })
             .catch(error => {

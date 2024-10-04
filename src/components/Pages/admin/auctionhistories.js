@@ -13,7 +13,6 @@ function AdminAuctionHistory() {
         // Fetch auction histories from the API
         axios.get('/api/Admin/auctionhistories')
             .then(response => {
-                console.log(response.data);
                 setAuctionHistories(response.data.$values); // Set auction histories in state from $values
                 setLoading(false); // Stop loading
             })

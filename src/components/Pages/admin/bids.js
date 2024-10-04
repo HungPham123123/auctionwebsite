@@ -13,7 +13,6 @@ function AdminBids() {
         // Fetch bids from the API
         axios.get('/api/Admin/bids')
             .then(response => {
-                console.log(response.data);
                 setBids(response.data.$values); // Set bids in state from $values
                 setLoading(false); // Stop loading
             })
@@ -31,17 +30,14 @@ function AdminBids() {
 
     const handleEdit = (bidId) => {
         // Logic for editing the bid
-        console.log(`Edit bid with ID: ${bidId}`);
     };
 
     const handleDelete = (bidId) => {
         // Logic for deleting the bid
-        console.log(`Delete bid with ID: ${bidId}`);
     };
 
     const handleCreateBid = () => {
         // Logic for creating a new bid
-        console.log('Create new bid');
     };
 
     const handlePageChange = (pageNumber) => {

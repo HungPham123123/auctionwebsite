@@ -14,7 +14,6 @@ function Orderbidding() {
         const fetchBids = async () => {
             try {
                 const response = await axios.get('/api/Auction/userbids');
-                console.log('Fetched Bids:', response.data); // Log the response data
                 setAuction(response.data.$values || []); // Correctly set auction state from $values
             } catch (error) {
                 setError(error.response ? error.response.data : 'Error fetching data');

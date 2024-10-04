@@ -15,7 +15,6 @@ function UserCreatedAuction() {
         const fetchCreatedAuctions = async () => {
             try {
                 const response = await axios.get('/api/Auction/created'); // Adjust the endpoint as per your backend
-                console.log(response.data);
                 setPayments(response.data.$values || []); // Assuming your data is in $values
             } catch (err) {
                 setError('Failed to fetch created auctions. Please try again later.');

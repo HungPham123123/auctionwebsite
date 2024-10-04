@@ -14,7 +14,6 @@ function Userpurchase() {
         const fetchWonAuctions = async () => {
             try {
                 const response = await axios.get('/api/Auction/won'); // Adjust the endpoint as per your backend
-                console.log(response.data)
                 setWonAuctions(response.data.$values || []); // Use empty array if $values is undefined
             } catch (err) {
                 setError('Failed to fetch won auctions. Please try again later.');

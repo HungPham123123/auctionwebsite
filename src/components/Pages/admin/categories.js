@@ -15,7 +15,6 @@ function AdminCategory() {
         // Fetch categories from the API
         axios.get('/api/Admin/categories')
             .then(response => {
-                console.log(response.data);
                 setCategories(response.data.$values); // Store categories in state
             })
             .catch(error => {

@@ -30,7 +30,6 @@ function AdminAuction() {
             try {
                 const response = await axios.get('/api/Admin/auctions');
                 setAuctions(response.data.$values);
-                console.log(response.data);
             } catch (error) {
                 const errorMessage = error.response ? error.response.data : 'Network error or no response from server.';
                 setError(errorMessage);
@@ -141,7 +140,7 @@ function AdminAuction() {
                                         <Card.Text>
                                             <strong>Starting Price:</strong> ${auction.itemStartingPrice}<br />
                                             <strong>Buy Now Price:</strong> ${auction.buyNowPrice}<br />
-                                            <strong>Status:</strong> {auction.auctionStatus ? 'Active' : 'Inactive'}<br />
+                                            <strong>Status:</strong> {auction.auctionStatus ? 'Active' : 'Ended'}<br />
                                             <strong>End Time:</strong> {new Date(auction.endTime).toLocaleString()}<br />
                                             <strong>Created At:</strong> {new Date(auction.createdAt).toLocaleString()}<br />
                                         </Card.Text>

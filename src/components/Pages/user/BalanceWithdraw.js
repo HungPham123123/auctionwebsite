@@ -63,7 +63,6 @@ const BalanceWithdraw = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get('/api/user/current');
-        console.log(response.data); // Log the entire response
         setBalance(response.data.balannce || 0); // Set the balance from $values
       } catch (error) {
         console.error("Error fetching user data:", error);

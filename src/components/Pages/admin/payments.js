@@ -13,7 +13,6 @@ function AdminPayments() {
         // Fetch payments from the API
         axios.get('/api/Admin/payments')
             .then(response => {
-                console.log(response.data);
                 setPayments(response.data.$values); // Store payments in state
             })
             .catch(error => {

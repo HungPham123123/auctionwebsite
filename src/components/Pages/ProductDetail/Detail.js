@@ -51,7 +51,6 @@ const Detail = () => {
         try {
             const response = await axios.get(`/api/Auction/${auctionID}`);
             setAuctionDetails(response.data);
-            console.log(response.data)
             if (response.data.item) {
                 setMainImage(response.data.item.imageUrl);
             }
