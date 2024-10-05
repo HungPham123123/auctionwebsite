@@ -1,0 +1,32 @@
+.sidebar {
+    height: 100vh; /* Full height */
+    padding: 0; /* Remove default padding */
+}
+
+.sidebar-heading {
+    padding: 1rem; /* Add padding for heading */
+    font-size: 1.5rem; /* Increase font size */
+    color: #343a40; /* Darker color for heading */
+    background-color: #f8f9fa; /* Light background for heading */
+    border-bottom: 1px solid #dee2e6; /* Add border below heading */
+}
+
+.nav-link {
+    padding: 0.75rem 1rem; /* Increased padding for links */
+    font-weight: 500; /* Medium font weight for links */
+    color: #495057; /* Default link color */
+}
+
+.nav-link:hover {
+    background-color: #e2e6ea; /* Light gray background on hover */
+}
+
+.nav-link.active {
+    font-weight: bold;
+    background-color: #007bff; /* Highlight active link */
+    color: white; /* White text for active link */
+}
+
+.admin-container {
+    margin-top: 70px;
+}

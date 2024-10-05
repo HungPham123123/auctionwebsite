@@ -40,14 +40,14 @@ function Signup() {
 
                 <div className="col-lg-4 col-12 d-flex align-items-center p-4">
                     <div className="w-100">
-                        <h2 className="text-center text-warning font-weight-bold mb-4">
-                            TRIP MANAGEMENT
+                        <h2 className="text-center font-weight-bold mb-4">
+                            Fox Auction
                         </h2>
 
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <input
-                                    className="form-control bg-light border border-secondary"
+                                    className="form-control bg-light border border-secondary mb-2"
                                     type="text"
                                     name="username"
                                     placeholder="Username"
@@ -58,7 +58,7 @@ function Signup() {
                             </div>
                             <div className="form-group">
                                 <input
-                                    className="form-control bg-light border border-secondary"
+                                    className="form-control bg-light border border-secondary mb-2"
                                     type="email"
                                     name="email"
                                     placeholder="Email"
@@ -70,7 +70,7 @@ function Signup() {
 
                             <div className="form-group position-relative">
                                 <input
-                                    className="form-control bg-light border border-secondary"
+                                    className="form-control bg-light border border-secondary mb-2"
                                     type={showPassword ? "text" : "password"}
                                     name="password"
                                     placeholder="Password"
@@ -96,7 +96,7 @@ function Signup() {
                                 </svg>
                             </div>
 
-                            <button className="btn btn-warning w-100 mb-3">
+                            <button className="btn btn-dark w-100 mb-3">
                                 Sign Up
                             </button>
                         </form>
@@ -127,7 +127,7 @@ function Signup() {
                         <div className="d-flex justify-content-between mt-3 text-muted">
                             <p>Already have an account?</p>
                             <Link to="/sign-in">
-                                <button className="btn btn-warning px-4">Sign in</button>
+                                <button className="btn btn-dark px-4">Sign in</button>
                             </Link>
                         </div>
                     </div>

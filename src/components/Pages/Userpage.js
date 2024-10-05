@@ -37,7 +37,7 @@ function Userpage() {
                                 <img src="Shoes/IMAGES/IMAGES/defaultuserimg.jpg" alt="" />
                             </button>
                             <div className="user-header-content">
-                                <h1 id="username">User Name</h1>
+                                <h1 id="username"></h1>
                                 <p id="member-since">Fox Auction Member Since (Created ACCOUNT)</p>
                             </div>
                         </section>
@@ -71,7 +71,7 @@ function Userpage() {
                                         to="order-bidding"
                                         onClick={() => handleTabClick('orderbidding')}
                                     >
-                                        Order Bidding
+                                         Bidding List
                                     </Link>
                                 </span>
                             </div>
@@ -82,10 +82,44 @@ function Userpage() {
                                         to="user-purchase"
                                         onClick={() => handleTabClick('purchase')}
                                     >
-                                        Purchase
+                                        Won Auction
                                     </Link>
                                 </span>
                             </div>
+                            <div className="nav-tab">
+                                <span>
+                                    <Link
+                                        className={`nav-link ${activeTab === 'my-auction' ? 'selected' : ''}`}
+                                        to="my-auction"
+                                        onClick={() => handleTabClick('my-auction')}
+                                    >
+                                        My Auction
+                                    </Link>
+                                </span>
+                            </div>
+                            <div className="nav-tab">
+                                <span>
+                                    <Link
+                                        className={`nav-link ${activeTab === 'payment' ? 'selected' : ''}`}
+                                        to="payment"
+                                        onClick={() => handleTabClick('payment')}
+                                    >
+                                        My Payments
+                                    </Link>
+                                </span>
+                            </div>
+                            <div className="nav-tab">
+                                <span>
+                                    <Link
+                                        className={`nav-link ${activeTab === 'balance' ? 'selected' : ''}`}
+                                        to="balance"
+                                        onClick={() => handleTabClick('balance')}
+                                    >
+                                        My Balance
+                                    </Link>
+                                </span>
+                            </div>
+                            
                         </div>
                         <div className="tab-content">
                             <Outlet />

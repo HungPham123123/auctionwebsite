@@ -28,7 +28,7 @@ const Detail = () => {
     }, []);
 
     const handleBidInputChange = useCallback((e) => {
-        const value = e.target.value.replace(/[^0-9]/g, '');
+        const value = e.target.value.replace(/[^0-9.]/g, ''); // Allow decimal input for bids
         setBidAmount(value);
     }, []);
 
@@ -46,20 +46,30 @@ const Detail = () => {
         }
     };
 
-    useEffect(() => {
-        const fetchAuctionDetails = async () => {
-            try {
-                const response = await axios.get(`/api/Auction/${auctionID}`);
-                setAuctionDetails(response.data);
-                if (response.data.item) {
-                    setMainImage(response.data.item.imageUrl);
-                }
-            } catch (error) {
-                console.error('Error fetching auction details:', error);
+    // Fetch auction details
+    const fetchAuctionDetails = async () => {
+        try {
+            const response = await axios.get(`/api/Auction/${auctionID}`);
+            setAuctionDetails(response.data);
+            if (response.data.item) {
+                setMainImage(response.data.item.imageUrl);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching auction details:', error);
+        }
+    };
 
-        fetchAuctionDetails();
+    useEffect(() => {
+        fetchAuctionDetails(); // Initial fetch
+    }, [auctionID]);
+
+    // Polling for updates every 5 seconds
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            fetchAuctionDetails(); // Re-fetch auction details to keep updated
+        }, 5000); // Every 5 seconds
+
+        return () => clearInterval(intervalId); // Cleanup on unmount
     }, [auctionID]);
 
     useEffect(() => {
@@ -108,6 +118,39 @@ const Detail = () => {
 
     const sortedAuctionHistories = auctionDetails?.auctionHistories?.$values?.slice().sort((a, b) => b.bidAmount - a.bidAmount) || [];
 
+    // Function to place a bid
+    const placeBid = async () => {
+        if (!bidAmount || parseFloat(bidAmount) <= 0) {
+            alert("Please enter a valid bid amount.");
+            return;
+        }
+
+        const bidData = {
+            auctionID: auctionDetails?.auctionID,
+            bidAmount: parseFloat(bidAmount),
+            bidTime: new Date().toISOString(),
+        };
+
+        try {
+            const response = await axios.post('/api/Bid', bidData);
+            // Update the auction details to reflect the new bid
+            setAuctionDetails(prevDetails => ({
+                ...prevDetails,
+                currentBid: {
+                    bidAmount: bidData.bidAmount,
+                    bidderUsername: response.data.bidderUsername
+                },
+                bids: Array.isArray(prevDetails?.bids) 
+                    ? [...prevDetails.bids, response.data] 
+                    : [response.data]
+            }));
+            setBidAmount(''); // Clear the bid input after a successful bid
+        } catch (error) {
+            console.error('Error placing bid:', error);
+            alert("Failed to place the bid. Please try again.");
+        }
+    };
+
     return (
         <div className="container container-detail">
             <div className="row">
@@ -141,31 +184,12 @@ const Detail = () => {
                 </div>
 
                 <div className="col-md-7">
-                    <img className="img-fluid main-image" src={mainImage} alt="Main" />
-
-                    <div className="product-description mb-3">
+                    <div className='main-image-wrapper'>
+                    <img className="main-image" src={mainImage} alt="Main" />
+                    </div>
+                    <div className="product-description mb-1">
                         <p>Description</p>
                         <p>{auctionDetails?.item.description}</p>
-                        {isMoreInfoVisible && (
-                            <div>
-                                <p><strong>General Introduction:</strong> This is an antique painting from the 18th century, crafted using oil on canvas.</p>
-                                <p><strong>Condition:</strong> Excellent, well-preserved.</p>
-                                <p><strong>Provenance:</strong> From a private collection in France.</p>
-                                <p><strong>Author Bio:</strong> 18th-century renowned artist.</p>
-                            </div>
-                        )}
-                        <p>
-                            <a
-                                href="#"
-                                className="toggle-more-info"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    toggleMoreInfo();
-                                }}
-                            >
-                                {isMoreInfoVisible ? '...Show less' : '...Show more'}
-                            </a>
-                        </p>
                     </div>
                 </div>
 
@@ -199,30 +223,40 @@ const Detail = () => {
                                     : auctionDetails?.item?.startingPrice}
                             </h3>
                             {remainingTime.ended ? (
-    <span className="ended-auction">Auction has ended</span>
-) : (
-    <span className="end-time text-danger d-flex align-items-center">
-        {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
-            <span key={unit} className="auction-timer d-flex flex-column align-items-center mx-2">
-                <span className="timer-value">{String(remainingTime[unit]).padStart(2, '0')}</span>
-                <span className="auction-date">{unit.charAt(0).toUpperCase() + unit.slice(1)}</span>
-            </span>
-        ))}
-    </span>
-)}
+                                <span className="ended-auction">Auction has ended</span>
+                            ) : (
+                                <span className="end-time text-danger d-flex align-items-center">
+                                    {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
+                                        <span key={unit} className="auction-timer d-flex flex-column align-items-center mx-2">
+                                            <span className="timer-value">{String(remainingTime[unit]).padStart(2, '0')}</span>
+                                            <span className="auction-date">{unit}</span>
+                                        </span>
+                                    ))}
+                                </span>
+                            )}
                         </div>
-                        <div className="input-group mb-3">
+
+                        <div className="form-group d-flex align-items-center mb-3">
+                            <label htmlFor="bidAmount" className="sr-only">Bid Amount</label>
                             <input
                                 type="text"
-                                className="form-control"
-                                placeholder="Place your bid"
+                                id="bidAmount"
                                 value={bidAmount}
+                                className="form-control mr-2"
+                                placeholder="Your bid"
                                 onChange={handleBidInputChange}
+                                style={{ flex: 1 }}
                             />
-                            <button className="btn btn-primary">Place Bid</button>
+                            <button
+                                type="button"
+                                className="detail-bid-button"
+                                onClick={placeBid}
+                                disabled={!bidAmount}
+                            >
+                                Bid
+                            </button>
                         </div>
-                    </div>
-                    <div className="seller-info">
+                        <div className="seller-info">
                         <hr className="custom-line" />
                         <div className="product-bid mb-3 d-flex justify-content-between align-items-center">
                             <div>
@@ -239,24 +273,36 @@ const Detail = () => {
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
             </div>
 
             {isModalVisible && (
-                <div className="modal" ref={modalRef}>
-                    <div className="modal-content">
-                        <span className="close" onClick={hideBidderHistory}>&times;</span>
-                        <h2>Bidder History</h2>
-                        <ul>
-                            {sortedAuctionHistories.map((history) => (
-                                <li key={history.id}>
-                                    <span>{history.bidderUsername}</span> bid ${history.bidAmount} on {new Date(history.timestamp).toUTCString()}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            )}
+    <div className="modal-background">
+        <div className="modal-contents" ref={modalRef}>
+            <h4>Bid History</h4>
+            <div className="scrollable-area mb-5">
+                {sortedAuctionHistories.length > 0 ? (
+                    <ul className=''>
+                        {sortedAuctionHistories.map((history) => (
+                            <li key={history.bidID} className='bidder-history'>
+                                <strong>{history.bidderUsername}</strong> placed a bid of <strong>${history.bidAmount}</strong><br/>
+                                Date: <strong>{history.timestamp}</strong>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No bids yet.</p>
+                )}
+            </div>
+            <div className="button-wrapper"> {/* New wrapper for the button */}
+                <button className="close-bidder-history" onClick={hideBidderHistory}>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+)}
         </div>
     );
 };
