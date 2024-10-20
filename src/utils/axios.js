@@ -2,7 +2,8 @@ import _axios from "axios";
 import Cookies from 'js-cookie';
 
 const axios = _axios.create({
-    baseURL: "https://auctiont2305m20241005002809.azurewebsites.net",
+    // baseURL: "https://auctiont2305m20241011163331.azurewebsites.net",
+    baseURL: "https://localhost:7006",
     timeout: 1000000,
 });
 
@@ -13,7 +14,6 @@ axios.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         } else {
-            console.warn('No token found in cookies.'); // Debugging: log warning if no token
         }
         return config;
     },

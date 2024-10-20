@@ -5,9 +5,9 @@ import { useAuth } from '../../../contexts/AuthProvider';
 function Signup() {
     const { signup } = useAuth();
     const navigate = useNavigate();
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [Username, setUsername] = useState("");
+    const [Email, setEmail] = useState("");
+    const [Password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
@@ -16,7 +16,7 @@ function Signup() {
         setError(""); // Reset error state before registration attempt
 
         // Call register function with username, email, and password
-        const errorMessage = await signup(username, email, password);
+        const errorMessage = await signup(Username, Email, Password);
         if (errorMessage) {
             setError(errorMessage);
         } else {
@@ -51,7 +51,7 @@ function Signup() {
                                     type="text"
                                     name="username"
                                     placeholder="Username"
-                                    value={username}
+                                    value={Username}
                                     onChange={(e) => setUsername(e.target.value)}
                                     required
                                 />
@@ -62,7 +62,7 @@ function Signup() {
                                     type="email"
                                     name="email"
                                     placeholder="Email"
-                                    value={email}
+                                    value={Email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
                                 />
@@ -74,7 +74,7 @@ function Signup() {
                                     type={showPassword ? "text" : "password"}
                                     name="password"
                                     placeholder="Password"
-                                    value={password}
+                                    value={Password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                 />

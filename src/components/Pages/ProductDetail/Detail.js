@@ -50,6 +50,7 @@ const Detail = () => {
     const fetchAuctionDetails = async () => {
         try {
             const response = await axios.get(`/api/Auction/${auctionID}`);
+            console.log(response.data)
             setAuctionDetails(response.data);
             if (response.data.item) {
                 setMainImage(response.data.item.imageUrl);
@@ -84,8 +85,8 @@ const Detail = () => {
     }, [isModalVisible]);
 
     const calculateRemainingTime = (endTime) => {
-        const now = moment.utc(); // Current time in UTC
-        const end = moment.utc(endTime); // End time in UTC
+        const now = moment(); // Current time in local
+        const end = moment(endTime); // End time in local
         const duration = moment.duration(end.diff(now));
 
         if (duration.asSeconds() <= 0) {
@@ -120,17 +121,19 @@ const Detail = () => {
 
     // Function to place a bid
     const placeBid = async () => {
+        // Validate bid amount
         if (!bidAmount || parseFloat(bidAmount) <= 0) {
             alert("Please enter a valid bid amount.");
             return;
         }
-
+    
+        // Prepare bid data
         const bidData = {
             auctionID: auctionDetails?.auctionID,
             bidAmount: parseFloat(bidAmount),
             bidTime: new Date().toISOString(),
         };
-
+    
         try {
             const response = await axios.post('/api/Bid', bidData);
             // Update the auction details to reflect the new bid
@@ -147,7 +150,9 @@ const Detail = () => {
             setBidAmount(''); // Clear the bid input after a successful bid
         } catch (error) {
             console.error('Error placing bid:', error);
-            alert("Failed to place the bid. Please try again.");
+            // Check if error response exists and show the message
+            const errorMessage = error.response?.data || "An error occurred while placing the bid. Please try again.";
+            alert(errorMessage);
         }
     };
 
@@ -196,11 +201,11 @@ const Detail = () => {
                 <div className="col-md-4">
                     <div className="product-info">
                         <div className="product-title mb-3">
-                            <p className="text-muted" style={{ fontWeight: '500' }}>{new Date(auctionDetails?.startTime).toUTCString()}</p>
+                            <p className="text-muted" style={{ fontWeight: '500' }}>{new Date(auctionDetails?.startTime).toString()}</p>
                             <h2>{auctionDetails?.item.title}</h2>
                         </div>
                         <div className="product-bid mb-3 d-flex justify-content-between align-items-center">
-                            <div>
+                        <div>
                                 <p className="mb-0">
                                     Leading bid |
                                     <span
@@ -235,7 +240,10 @@ const Detail = () => {
                                 </span>
                             )}
                         </div>
-
+                        
+                        <div>
+                            <p style={{marginBottom: '2px'}}>Minimum Bids: {auctionDetails?.minimumBidJump}</p>
+                        </div>
                         <div className="form-group d-flex align-items-center mb-3">
                             <label htmlFor="bidAmount" className="sr-only">Bid Amount</label>
                             <input
@@ -277,7 +285,7 @@ const Detail = () => {
                 </div>
             </div>
 
-            {isModalVisible && (
+{isModalVisible && (
     <div className="modal-background">
         <div className="modal-contents" ref={modalRef}>
             <h4>Bid History</h4>

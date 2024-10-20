@@ -100,6 +100,17 @@ function Userpage() {
                             <div className="nav-tab">
                                 <span>
                                     <Link
+                                        className={`nav-link ${activeTab === 'seller-buyer' ? 'selected' : ''}`}
+                                        to="seller-buyer"
+                                        onClick={() => handleTabClick('seller-buyer')}
+                                    >
+                                        Seller-Buyer Information
+                                    </Link>
+                                </span>
+                            </div>
+                            <div className="nav-tab">
+                                <span>
+                                    <Link
                                         className={`nav-link ${activeTab === 'payment' ? 'selected' : ''}`}
                                         to="payment"
                                         onClick={() => handleTabClick('payment')}

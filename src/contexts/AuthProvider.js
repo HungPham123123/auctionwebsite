@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
                 throw new Error('No token received');
             }
         } catch (error) {
-            const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
+            const errorMessage = error.response?.data || 'Login failed. Please try again.';
             return errorMessage;
         }
     };
@@ -39,24 +39,27 @@ export const AuthProvider = ({ children }) => {
                 throw new Error('No token received');
             }
         } catch (error) {
-            const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
+            const errorMessage = error.response?.data || 'Login failed. Please try again.';
             return errorMessage;
         }
     };
 
-    const signup = async (username, email, password) => {
+    const signup = async (Username, Email, Password) => {
         try {
             const response = await axios.post('/api/Auth/register', {
-                username,
-                email,
-                password,
+                Username,
+                Email,
+                Password,
             });
-
+    
             if (response.status === 200) {
-                // Handle successful signup if necessary
+                console.log("Registration successful", response.data);
+            } else {
+                console.error("Unexpected response:", response);
             }
         } catch (error) {
-            const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.';
+            const errorMessage = error.response?.data || 'Registration failed. Please try again.';
+            console.error("Registration error:", errorMessage);
             return errorMessage; // Return error message
         }
     };

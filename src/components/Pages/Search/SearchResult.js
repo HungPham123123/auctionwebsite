@@ -27,25 +27,27 @@ const SearchResult = () => {
     }, []);
 
     useEffect(() => {
-        console.log("Query:", query);
         if (query) {
             const filtered = results.filter(auction => {
                 const endTime = moment.utc(auction.endTime); 
                 const hasEnded = auction.auctionStatus === 'Ended';
-                
-                // Exclude auctions that ended more than 24 hours ago
-                if (hasEnded && moment().diff(endTime, 'hours') > 24) {
+    
+                // Only show auctions that are active and haven't ended
+                if (hasEnded || auction.auctionStatus !== 'Active') {
                     return false; // Exclude this auction
                 }
-
+    
                 return auction.itemTitle && auction.itemTitle.toLowerCase().includes(query.toLowerCase());
             });
-
+    
             setFilteredResults(filtered);
         } else {
-            setFilteredResults(results);
+            // Show only active auctions if no query is present
+            const activeAuctions = results.filter(auction => auction.auctionStatus === 'Active');
+            setFilteredResults(activeAuctions);
         }
     }, [query, results]);
+    
 
     useEffect(() => {
         startTimers();

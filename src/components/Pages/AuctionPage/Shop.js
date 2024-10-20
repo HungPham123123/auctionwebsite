@@ -16,27 +16,29 @@ function Shop() {
         try {
             const response = await axios.get('/api/Auction/all');
             const auctionData = response.data.$values || [];
-            const now = moment.utc(); // Use UTC time
-
-            // Filter auctions: only include Active or those ended within the last 24 hours
+            const now = moment(); // Use local time
+    
+            // Filter auctions: only include Active auctions
             const filteredData = auctionData.filter(auction => {
-                const endTime = moment.utc(auction.endTime); // Ensure endTime is in UTC
-                const hasEnded = auction.auctionStatus === 'Ended';
+                const endTime = moment(auction.endTime); // No UTC conversion
                 const isActive = auction.auctionStatus === 'Active';
-                const endedRecently = hasEnded && now.diff(endTime, 'hours') <= 24;
-
-                return isActive || endedRecently;
+                const hasEnded = auction.auctionStatus === 'Ended';
+    
+                // Only return active auctions; exclude ended auctions
+                return isActive && now.isBefore(endTime);
             });
-
+    
             setAuctions(filteredData);
         } catch (error) {
             console.error("Error fetching auctions:", error);
         }
     };
+    
+    
 
     const calculateTimeLeft = (endTime) => {
-        const now = moment.utc(); // Use UTC time
-        const end = moment.utc(endTime); // Ensure endTime is in UTC
+        const now = moment(); // Use local time
+        const end = moment(endTime); // No UTC conversion
         const duration = moment.duration(end.diff(now));
 
         if (duration.asSeconds() <= 0) {
@@ -221,13 +223,8 @@ function Shop() {
                                         <div className="auction-name">
                                             <span>{auction.itemTitle}</span>
                                         </div>
-                                        <div className="space-between">
-                                            <div className="auction-category">
-                                                <p>{auction.categoryName}</p>
-                                            </div>
-                                            <div className="auction-price">
-                                                <p>Starting Bid: {auction.itemStartingPrice}</p>
-                                            </div>
+                                        <div className="auction-price">
+                                            <span>${auction.itemStartingPrice.toFixed(2)}</span>
                                         </div>
                                     </div>
                                 </Link>

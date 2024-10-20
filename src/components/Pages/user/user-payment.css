@@ -56,3 +56,55 @@
     background-color: #0056b3; /* Darkens button on hover */
 }
 
+.payment-modal-content {
+    max-width: 800px;
+    width: 100%;
+    position: relative;
+}
+
+.payment-form-container {
+    max-width: 800px; /* Set a max width for the form container */
+    margin: auto; /* Center the container */
+}
+
+.payment-form-card {
+    border-radius: 0.5rem;
+}
+
+.payment-form-body {
+    padding: 1.5rem;
+}
+
+.payment-form-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.payment-form-text {
+    font-size: 1rem;
+}
+
+.payment-form-close {
+    top: 0;
+    right: 0;
+    position: absolute;
+    background-color: transparent; /* Ensure the close button has a transparent background */
+    border: none; /* Remove border */
+    color: black;
+    font-size: 30px;
+}
+
+
+.payment-form-element {
+    border-radius: 0.25rem; /* Add border-radius to the PaymentElement */
+    padding: 1rem; /* Add padding for spacing */
+}
+
+.payment-form-submit {
+    width: 100%; /* Make the submit button full-width */
+    border-radius: 0.25rem;
+}
+
+.alert {
+    margin-bottom: 20px;
+}

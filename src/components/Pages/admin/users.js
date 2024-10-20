@@ -47,10 +47,6 @@ function AdminUser() {
         }
     };
 
-    const handleCreateUser = () => {
-        setCurrentUser({}); // Reset current user to empty for creating new user
-        setShowModal(true); // Show the modal
-    };
 
     const handleSaveUser = async (event) => {
         event.preventDefault(); // Prevent default form submission
@@ -141,9 +137,6 @@ function AdminUser() {
     return (
         <div>
             <h1>Users List</h1>
-            <Button variant="primary" onClick={handleCreateUser} className="mb-3">
-                Create User
-            </Button>
             {currentItems.length > 0 ? (
                 <table className="table table-striped">
                     <thead>
@@ -216,16 +209,6 @@ function AdminUser() {
                                 placeholder="Enter email" 
                                 value={currentUser?.email || ''} 
                                 onChange={(e) => setCurrentUser({ ...currentUser, email: e.target.value })} 
-                                required 
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formPasswordHash">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control 
-                                type="password" 
-                                placeholder="Enter password" 
-                                value={currentUser?.passwordHash || ''} 
-                                onChange={(e) => setCurrentUser({ ...currentUser, passwordHash: e.target.value })} 
                                 required 
                             />
                         </Form.Group>

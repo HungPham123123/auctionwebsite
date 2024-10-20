@@ -139,8 +139,7 @@ function AdminAuction() {
                                         <Card.Title style={{ fontSize: '1.1rem' }}>{auction.itemTitle}</Card.Title>
                                         <Card.Text>
                                             <strong>Starting Price:</strong> ${auction.itemStartingPrice}<br />
-                                            <strong>Buy Now Price:</strong> ${auction.buyNowPrice}<br />
-                                            <strong>Status:</strong> {auction.auctionStatus ? 'Active' : 'Ended'}<br />
+                                            <strong>Status:</strong> {auction.auctionStatus}<br />
                                             <strong>End Time:</strong> {new Date(auction.endTime).toLocaleString()}<br />
                                             <strong>Created At:</strong> {new Date(auction.createdAt).toLocaleString()}<br />
                                         </Card.Text>
@@ -291,36 +290,28 @@ function AdminAuction() {
                                     />
                                 </Form.Group>
 
-                                <Form.Group controlId="formAuctionBuyNowPrice">
-                                    <Form.Label>Buy Now Price</Form.Label>
-                                    <Form.Control
-                                        type="number"
-                                        placeholder="Enter buy now price"
-                                        value={currentAuction ? currentAuction.buyNowPrice : ''}
-                                        onChange={(e) => setCurrentAuction({ ...currentAuction, buyNowPrice: e.target.value })}
-                                        required
-                                    />
-                                </Form.Group>
 
                                 <Form.Group controlId="formAuctionStartTime">
-                                    <Form.Label>Start Time</Form.Label>
-                                    <Form.Control
-                                        type="datetime-local"
-                                        value={currentAuction ? new Date(currentAuction.startTime).toISOString().slice(0, 16) : ''}
-                                        onChange={(e) => setCurrentAuction({ ...currentAuction, startTime: e.target.value })}
-                                        required
-                                    />
-                                </Form.Group>
+    <Form.Label>Start Time</Form.Label>
+    <Form.Control
+        type="datetime-local"
+        // Format the date to local time without converting to UTC
+        value={currentAuction ? currentAuction.startTime.slice(0, 16) : ''}
+        onChange={(e) => setCurrentAuction({ ...currentAuction, startTime: e.target.value })}
+        required
+    />
+</Form.Group>
 
-                                <Form.Group controlId="formAuctionEndTime">
-                                    <Form.Label>End Time</Form.Label>
-                                    <Form.Control
-                                        type="datetime-local"
-                                        value={currentAuction ? new Date(currentAuction.endTime).toISOString().slice(0, 16) : ''}
-                                        onChange={(e) => setCurrentAuction({ ...currentAuction, endTime: e.target.value })}
-                                        required
-                                    />
-                                </Form.Group>
+<Form.Group controlId="formAuctionEndTime">
+    <Form.Label>End Time</Form.Label>
+    <Form.Control
+        type="datetime-local"
+        // Format the date to local time without converting to UTC
+        value={currentAuction ? currentAuction.endTime.slice(0, 16) : ''}
+        onChange={(e) => setCurrentAuction({ ...currentAuction, endTime: e.target.value })}
+        required
+    />
+</Form.Group>
 
                                 {/* Category Dropdown */}
                                

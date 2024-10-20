@@ -13,7 +13,6 @@ import CreateProductForm from './components/Pages/CreateAuction/CreateAuctionFor
 import Detail from './components/Pages/ProductDetail/Detail';
 import Signup from './components/Pages/SignInSignUp/Signup';
 import Shop from './components/Pages/AuctionPage/Shop';
-import Payment from './components/payment/payment';
 import Forgotpassword from './components/Pages/SignInSignUp/forgotpassword';
 import Ressetpassword from './components/Pages/SignInSignUp/resstpassword';
 import BalanceWithdraw from './components/Pages/user/BalanceWithdraw';
@@ -31,6 +30,9 @@ import AdminLogin from './components/Pages/admin/adminlogin';
 import UserCreatedAuction from './components/Pages/user/userCreatedAuction';
 import AcceptRejectAuction from './components/Pages/admin/AcceptRejectAuction';
 import SearchResult from './components/Pages/Search/SearchResult';
+import CancelPayment from './components/payment/CancelPayment';
+import SuccessPayment from './components/payment/SuccessPayment ';
+import SellerBuyerInformation from './components/Pages/user/SellerBuyerInformation';
 
 function App() {
   return (
@@ -47,13 +49,15 @@ function App() {
             <Route path='balance' element={<BalanceWithdraw />}/>
             <Route path='payment' element={<UserPayment />} />
             <Route path='my-auction' element={<UserCreatedAuction />}/>
+            <Route path='seller-buyer' element={<SellerBuyerInformation />} />
           </Route>
           <Route path='/add-listing' element={<CreateProductForm />}/>
           <Route path="/auction/detail/:auctionID" element={<Detail />} />
           <Route path='/sign-in' element={<Signin/>}/>
           <Route path='/sign-up' element={<Signup/>}/>
           <Route path='/shop' element={<Shop/>}/>
-          <Route path="/payment" element={<Payment/>} />
+          <Route path='/payment/canceled' element={<CancelPayment />}/>
+          <Route path='/payment/success/:paymentID' element={<SuccessPayment />} />
           <Route path='/forgot-password' element={<Forgotpassword/>}/>
           <Route path='/reset-password' element={<Ressetpassword/>}/>
           <Route path='/admin' element={<AdminPage />}>

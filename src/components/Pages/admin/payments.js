@@ -65,7 +65,13 @@ function AdminPayments() {
                                 <td>{payment.auctionTitle || "N/A"}</td>
                                 <td>${payment.paymentAmount}</td>
                                 <td>{new Date(payment.paymentDate).toLocaleString()}</td>
-                                <td>{payment.paymentStatus === 1 ? "Pending" : payment.paymentStatus === 2 ? "Completed" : "Failed"}</td>
+                                <td>
+                {payment.paymentStatus === 0 && "Pending"}
+                {payment.paymentStatus === 1 && "Completed"}
+                {payment.paymentStatus === 2 && "Failed"}
+                {payment.paymentStatus === 3 && "Refunded"}
+                {payment.paymentStatus === 4 && "Cancelled"}
+            </td>
                             </tr>
                         ))
                     ) : (

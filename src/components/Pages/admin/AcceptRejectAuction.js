@@ -65,7 +65,6 @@ function AcceptRejectAuction() {
                         <th>Title</th>
                         <th>Description</th>
                         <th>Starting Price</th>
-                        <th>Buy Now Price</th>
                         <th>Category</th>
                         <th>Condition</th>
                         <th>Status</th>
@@ -79,7 +78,6 @@ function AcceptRejectAuction() {
                             <td>{auction.itemTitle}</td>
                             <td>{auction.itemDescription}</td>
                             <td>${auction.itemStartingPrice}</td>
-                            <td>${auction.buyNowPrice}</td>
                             <td>{auction.categoryName}</td>
                             <td>{auction.itemCondition}</td>
                             <td>{auction.auctionStatus}</td>
